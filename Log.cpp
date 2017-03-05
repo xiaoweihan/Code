@@ -248,7 +248,6 @@ unsigned long CHandleFile::GetFileSize( void )
 CLog& CLog::CreateInstance( void )
 {
 	//唯一的一个日志实例类
-	static CLog s_Log;
 	return s_Log;
 }
 
@@ -425,4 +424,7 @@ void CLog::SetLogNamePrefix( const char* szPrefix )
 	m_strLogPrefix = szPrefix;
 
 }
+
+CLog CLog::s_Log;
+
 /********************************************************************************************************************************************************************/
