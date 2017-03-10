@@ -9,6 +9,7 @@
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/transport/TSocket.h>
+#include <thrift/protocol/TMultiplexedProtocol.h>
 #include <thrift/windows/TWinsockSingleton.h>
 #include <string>
 #include <boost/thread.hpp>
@@ -38,6 +39,7 @@ static std::string GetExeDirecory(void);
 
 static void BlockTest(int nPort);
 static void NoBlockTest(int nPort);
+static void MultiServiceBlockTest(int nPort);
 int _tmain(int argc, _TCHAR* argv[])
 {
 
@@ -128,4 +130,35 @@ void NoBlockTest( int nPort )
 		cout<<"catch a execption,the exception is "<<tx.what()<<endl;
 	}
 }
+
+//多服务的访问
+void MultiServiceBlockTest( int nPort )
+{
+	boost::shared_ptr<TTransport> socket(new TSocket("127.0.0.1", 10067));
+	boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+	boost::shared_ptr<TMultiplexedProtocol> MixProtocol(new TMultiplexedProtocol(protocol,"QueryService"));
+	QueryServiceClient Client(MixProtocol);
+
+	try
+	{
+		transport->open();
+
+		while (true)
+		{
+			std::string strName;
+			Client.QueryNameByID(strName,12);
+			cout<<"the Query Name is "<<strName<<endl;
+			NECESSARY_LOG("the query name is [%s].",strName.c_str());
+			boost::this_thread::sleep(boost::posix_time::seconds(1));
+		}
+
+		transport->close();
+	}
+	catch (TException& tx)
+	{
+		cout<<"catch a execption,the exception is "<<tx.what()<<endl;
+	}
+}
+
 

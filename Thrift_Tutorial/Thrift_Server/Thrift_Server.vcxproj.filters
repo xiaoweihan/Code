@@ -51,6 +51,12 @@
     <ClInclude Include="Log.h">
       <Filter>log</Filter>
     </ClInclude>
+    <ClInclude Include="ZipService.h">
+      <Filter>thrift</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcreteZip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -79,6 +85,12 @@
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipService.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="ConcreteZip.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

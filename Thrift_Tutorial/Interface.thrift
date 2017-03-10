@@ -10,3 +10,9 @@ service QueryService
 
 }
 
+//定义另外一个服务
+service ZipService
+{
+   void Zip()
+}
+

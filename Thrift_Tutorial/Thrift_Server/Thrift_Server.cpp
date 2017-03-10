@@ -4,13 +4,14 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
-#include "QueryService.h"
 #include "ConcreteService.h"
+#include "ConcreteZip.h"
 #include <thrift/concurrency/ThreadManager.h>
 #include <thrift/concurrency/PlatformThreadFactory.h>
 #include <thrift/concurrency/PosixThreadFactory.h>
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TThreadPoolServer.h>
+#include <thrift/processor/TMultiplexedProcessor.h>
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/server/TThreadedServer.h>
 #include <thrift/server/TNonblockingServer.h>
@@ -121,6 +122,33 @@ static void NoBlockServerModel(int nPort)
 	{
 		cout<<e.what()<<endl;
 	}
+
+}
+
+//多服务模型
+static void MultiServiceServerModel(int nPort)
+{
+
+	shared_ptr<CConcreteService> handler1(new CConcreteService());
+	shared_ptr<TProcessor> processor1(new QueryServiceProcessor(handler1));
+
+	shared_ptr<CConcreteZip> handler2(new CConcreteZip());
+	shared_ptr<TProcessor> processor2(new ZipServiceProcessor(handler2));
+
+	shared_ptr<TMultiplexedProcessor> MixProcessor(new TMultiplexedProcessor());
+
+	if (MixProcessor)
+	{
+		MixProcessor->registerProcessor("QueryService",processor1);
+		MixProcessor->registerProcessor("ZipService",processor2);
+	}
+
+	shared_ptr<TServerTransport> serverTransport(new TServerSocket(nPort));
+	shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+	shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
+	TSimpleServer Server(MixProcessor, serverTransport, transportFactory, protocolFactory);
+	Server.serve();
 
 }
 

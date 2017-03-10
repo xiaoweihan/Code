@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConcreteService.h" />
+    <ClInclude Include="ConcreteZip.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Interface_constants.h" />
     <ClInclude Include="Interface_types.h" />
@@ -159,9 +160,11 @@
     <ClInclude Include="QueryService.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="ZipService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConcreteService.cpp" />
+    <ClCompile Include="ConcreteZip.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="Interface_constants.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -190,6 +193,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Thrift_Server.cpp" />
+    <ClCompile Include="ZipService.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
