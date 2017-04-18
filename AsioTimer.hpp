@@ -10,45 +10,36 @@
 #include <boost/static_assert.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/bind.hpp>
-template <typename T>
+template <typename T,int nExpireTime>
 class AsioTimer
 {
 public:
-	AsioTimer(T CallBack) :m_pCallBack(CallBack),
-	m_Timer(m_IOService)
+	AsioTimer(T CallBack) : m_pCallBack(CallBack),
+	m_Timer(m_IOService),
+	m_nExpireTime(nExpireTime)
 	{
 	}
-	AsioTimer() = default;
+
+	AsioTimer() : 
+	m_Timer(m_IOService),
+	m_nExpireTime(nExpireTime)
+	{
+	}
 	~AsioTimer() = default;
-
-
 public:
 	void StartAsioTimer()
 	{
-		m_Timer.expires_from_now(boost::chrono::seconds(m_nGap));
+		m_Timer.expires_from_now(boost::chrono::seconds(m_nExpireTime));
 		m_Timer.async_wait(boost::bind(&AsioTimer::TimeProc, this, boost::asio::placeholders::error));
 		m_IOService.run();
-
 	}
 
 	void StopAsioTimer()
 	{
 		m_Timer.cancel();
-
 		m_IOService.stop();
 	}
 
-	void SetTimeGap(int nTimeGap)
-	{
-		m_nGap = nTimeGap;
-	}
-
-	int GetTimeGap(void) const
-	{
-		return m_nGap;
-	}
-
-private:
 	void TimeProc(const boost::system::error_code& e)
 	{
 		if (boost::system::errc::success == e.value())
@@ -58,20 +49,25 @@ private:
 				m_pCallBack();
 			}
 
-			m_Timer.expires_from_now(boost::chrono::seconds(m_nGap));
+			m_Timer.expires_from_now(boost::chrono::seconds(m_nExpireTime));
 			m_Timer.async_wait(boost::bind(&AsioTimer::TimeProc,this,boost::asio::placeholders::error));
 		}
+	}
+
+	template <typename F>
+	void SetCallBack(F CallBack)
+	{
+		m_pCallBack = CallBack;
 	}
 private:
 	//IO_Service
 	boost::asio::io_service m_IOService;
 	//用于执行定时任务的回调函数
 	boost::function<T> m_pCallBack;
-	//定时间隔(单位:S)
-	int m_nGap = 1;
 	//定时器
 	boost::asio::steady_timer m_Timer;
-
+	//超时时间
+	int m_nExpireTime;
 };
 
 
