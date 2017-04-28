@@ -18,12 +18,6 @@ public:
 	~ConditionNotifier() = default;
 
 public:
-	void SetWaitFlag(bool bWaitFlag)
-	{
-		boost::lock_guard<boost::mutex> Lock(m_Mutex);
-		m_bWait = bWaitFlag;
-	}
-
 	void Wait(void)
 	{
 		auto Pred = [this]()->bool
@@ -37,8 +31,10 @@ public:
 
 	void Notify(void)
 	{
-		boost::unique_lock<boost::mutex> Lock(m_Mutex);
-		m_bWait = false;
+		{
+		  boost::unique_lock<boost::mutex> Lock(m_Mutex);
+		  m_bWait = false;
+		}
 		m_CV.notify_one();
 	}
 private:
