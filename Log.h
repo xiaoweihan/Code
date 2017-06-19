@@ -241,7 +241,7 @@ private:
 	LOGLEVEL m_loglevel;
 	//日志文件的前缀名
 	string m_strLogPrefix;
-	//单实例对象
+
 	static CLog s_Log;
 };
 

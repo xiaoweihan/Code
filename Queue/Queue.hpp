@@ -43,7 +43,7 @@ public:
 		//判断是否为空
 		m_PutCondition.wait(Lock, [this]()->bool 
 		{
-			return (!(m_ElementArray.size() == m_nMaxElement) || m_bNeedExit);
+			return (!(static_cast<int>(m_ElementArray.size()) == m_nMaxElement) || m_bNeedExit);
 		});
 
 		//如果需要退出
