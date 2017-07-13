@@ -214,7 +214,6 @@ void CSerialPortService::WriteHandler(BYTE* pData, int nDataLength, const boost:
 bool CSerialPortService::InitSerialPort(void)
 {
 
-#if 0
 	boost::system::error_code ec;
 	m_SerialPort.open(m_SerialOption.strSerialPort, ec);
 	if (ec)
@@ -290,7 +289,7 @@ bool CSerialPortService::InitSerialPort(void)
 	{
 		return false;
 	}
-#endif
+
 	return true;
 }
 
