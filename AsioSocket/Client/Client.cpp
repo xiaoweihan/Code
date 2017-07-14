@@ -2,29 +2,47 @@
 //
 
 #include "stdafx.h"
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/ip/address.hpp>
 #include <iostream>
-int main()
+#include <cstring>
+#include <boost/thread.hpp>
+#include "AsioSocket.h"
+
+void Display(bool bResult)
+{
+	using namespace std;
+	if (bResult)
+	{
+		cout << "Succeed!" << endl;
+	}
+	else
+	{
+		cout << "Failed!" << endl;
+	}
+}
+
+void SendResult(unsigned int nDataLength)
 {
 
 	using namespace std;
-	using namespace boost::asio;
 
-	boost::asio::ip::address NetAddress = boost::asio::ip::address::from_string("224.1.1.223");
+	cout << "send succeed,the length = " << nDataLength << endl;
+
+}
+int main()
+{
+
+	char szData[] = "hello,Asio,It is very good.";
+	using namespace std;
+	CAsioSocketClient Client;
+
+	Client.SetConnectCallBack(Display);
+	Client.SetSendedCallBack(SendResult);
+	Client.AsyncConnect("172.24.32.240", 10024);
 
 
-	if (NetAddress.is_loopback())
-	{
-		cout << "It is a loopback address." << endl;
-	}
 
-	if (NetAddress.is_multicast())
-	{
-		cout << "It is a multicase address." << endl;
-	}
-
-
+	Client.StartWork();
+	
     return 0;
 }
 
