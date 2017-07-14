@@ -33,6 +33,7 @@ int main()
 
 	char szData[] = "hello,Asio,It is very good.";
 	using namespace std;
+	using namespace boost;
 	CAsioSocketClient Client;
 
 	Client.SetConnectCallBack(Display);
@@ -41,8 +42,45 @@ int main()
 
 
 
-	Client.StartWork();
-	
+	auto ThreadHandler = [&]()
+	{
+		Client.StartWork();
+	};
+	//开启启动线程
+	boost::thread T(ThreadHandler);
+
+
+	cout << "请根据以下提示进行操作!" << endl;
+
+	cout << "send:发送数据" << endl;
+	cout << "quit:退出程序" << endl;
+
+	while (true)
+	{
+		string strOperation;
+
+		cin >> strOperation;
+
+		if (strOperation == "send")
+		{
+			string strContent;
+			cout << "请输入需要发送的内容:" << endl;
+			cin >> strContent;
+
+			Client.AsyncSendData(strContent.c_str(), strContent.length());
+		}
+		else if (strOperation == "quit")
+		{
+			Client.StopWork();
+			T.join();
+			break;
+		}
+		else
+		{
+
+		}
+
+	}
     return 0;
 }
 
