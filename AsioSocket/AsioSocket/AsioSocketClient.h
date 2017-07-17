@@ -1,20 +1,21 @@
 /**************************************************************************
 Copyright(C):
-FileName:AsioSocket.h
+FileName:AsioSocketClient.h
 Description:基于Asio机制的Socket
 Author:xiaowei.han
 Date:2017/07/13
 Others:
 Histroy:
 **************************************************************************/
-#ifndef ASIO_SOCKET_H
-#define ASIO_SOCKET_H
+#ifndef ASIO_SOCKET_CLIENT_H
+#define ASIO_SOCKET_CLIENT_H
 //不使用STD中的CHRONO
 #define BOOST_ASIO_DISABLE_STD_CHRONO
 #include <boost/asio.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/address.hpp>
 #include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
 #include <string>
 //连接完成的回调
 using pAsyncConnectCallBack = void(*)(bool bResult);
@@ -23,17 +24,17 @@ using pAsyncSendedCallBack = void(*)(unsigned int nDataLength);
 //接收完成的回调
 using pAsyncReceivedCallBack = void(*)(char* pData,unsigned int nDataLength);
 //基于practor模式的套接字
-class CAsioSocketClient
+class CAsioSocketClient : boost::noncopyable
 {
 public:
 	CAsioSocketClient();
+	explicit CAsioSocketClient(boost::asio::io_service& IOService);
 	~CAsioSocketClient();
-
 public:
-
 	void StartWork();
 	void StopWork();
-
+	//获取内部套接字
+	boost::asio::ip::tcp::socket& GetSocket(void);
 	//同步连接
 	bool SyncConnect(const std::string strAddress, unsigned short usPort);
 	bool SyncConnect(const char* szAddress, unsigned short usPort);

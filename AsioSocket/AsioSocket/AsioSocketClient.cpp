@@ -1,7 +1,7 @@
 
 /**************************************************************************
 Copyright(C):
-FileName:AsioSocket.cpp
+FileName:AsioSocketClient.cpp
 Description:基于Asio机制的Socket
 Author:xiaowei.han
 Date:2017/07/13
@@ -9,7 +9,7 @@ Others:
 Histroy:
 **************************************************************************/
 #include "stdafx.h"
-#include "AsioSocket.h"
+#include "AsioSocketClient.h"
 #include <boost/core/ignore_unused.hpp>
 #include <boost/bind.hpp>
 CAsioSocketClient::CAsioSocketClient():
@@ -17,6 +17,20 @@ CAsioSocketClient::CAsioSocketClient():
 	m_AsioSocket(m_IOService)
 {
 
+	m_pRecvBuffer = new char[m_nRecvBufferLength];
+}
+
+/**************************************************************************
+@FunctionName:CAsioSocketClient
+@FunctionDestription:根据外部的IOService构造Socket
+@InputParam:
+@OutPutParam:
+@ReturnValue:
+**************************************************************************/
+CAsioSocketClient::CAsioSocketClient(boost::asio::io_service& IOService):
+	m_AsioSocket(IOService),
+	m_Work(m_IOService)
+{
 	m_pRecvBuffer = new char[m_nRecvBufferLength];
 }
 
@@ -147,7 +161,7 @@ void CAsioSocketClient::AsyncSendData(const char* pData, unsigned int nDataLengt
 
 			if (!e)
 			{
-				m_SendedNotifier(nBytesTransferred);
+				m_SendedNotifier((unsigned int)nBytesTransferred);
 			}
 
 		}
@@ -226,5 +240,10 @@ bool CAsioSocketClient::SyncRecvData(char* pBuffer, unsigned int nBufferLength, 
 
 
 	return true;
+}
+
+boost::asio::ip::tcp::socket& CAsioSocketClient::GetSocket(void)
+{
+	return m_AsioSocket;
 }
 

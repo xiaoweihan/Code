@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Asio">
+      <UniqueIdentifier>{e92c1063-57b8-4d73-a09a-de72723cbec4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,8 +27,11 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AsioSocket.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\AsioSocket\AsioSocketClient.h">
+      <Filter>Asio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AsioSocket\AsioSocketServer.h">
+      <Filter>Asio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -35,8 +41,11 @@
     <ClCompile Include="Client.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AsioSocket.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\AsioSocket\AsioSocketClient.cpp">
+      <Filter>Asio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AsioSocket\AsioSocketServer.cpp">
+      <Filter>Asio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

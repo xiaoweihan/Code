@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cstring>
 #include <boost/thread.hpp>
-#include "AsioSocket.h"
+#include "AsioSocketClient.h"
 
 void Display(bool bResult)
 {
@@ -67,7 +67,7 @@ int main()
 			cout << "请输入需要发送的内容:" << endl;
 			cin >> strContent;
 
-			Client.AsyncSendData(strContent.c_str(), strContent.length());
+			Client.AsyncSendData(strContent.c_str(), (unsigned int)strContent.length());
 		}
 		else if (strOperation == "quit")
 		{
