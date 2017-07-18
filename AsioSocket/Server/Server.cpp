@@ -11,6 +11,10 @@
 static void TestSyncAccept(void);
 //测试异步接收连接
 static void TestAsyncAccept(void);
+//测试解析IP地址
+static void ParseIPAddress(void);
+
+
 
 //连接成功的回调函数
 static void AcceptCallBack(CAsioSocketClient* pClient, bool bResult);
@@ -32,7 +36,8 @@ int main()
 {
 	
 	//TestAsyncAccept();
-	TestAsyncAccept();
+	//TestAsyncAccept();
+	ParseIPAddress();
     return 0;
 }
 
@@ -78,3 +83,24 @@ void TestAsyncAccept(void)
 	p = nullptr;
 }
 
+void ParseIPAddress(void)
+{
+	using namespace boost::asio;
+	using namespace std;
+
+	boost::asio::io_service IOService;
+
+	ip::tcp::resolver Resolver(IOService);
+
+	ip::tcp::resolver::query Query("www.baidu.com","https");
+
+	auto Iter = Resolver.resolve(Query);
+
+	decltype(Iter) EndIter;
+
+	while (Iter != EndIter)
+	{
+		cout << Iter->endpoint().address().to_string()<<":"<<Iter->endpoint().port() << endl;
+		++Iter;
+	}
+}
