@@ -9,18 +9,13 @@ Histroy:
 *******************************************************************************/
 #ifndef DUMP_FILE_SWITCH_H
 #define DUMP_FILE_SWITCH_H
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 class CDumpFileSwitch
 {
 public:
-    static CDumpFileSwitch& CreateInstance(void);
-
-    void SetDumpFilePath(const char* szDumpFilePath);
-    void OpenSwitch(void);
-    //通过修改注册表生成dmp文件 （1:minidump 2:fulldump）
-    void OpenSwitchWithReg(int nType,const char* szExeName);
-private:
-    CDumpFileSwitch(void);
+    CDumpFileSwitch(LPCTSTR pDumpFileName);
     ~CDumpFileSwitch(void);
 };
 
