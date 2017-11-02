@@ -1,20 +1,21 @@
 #使用.o替换.cpp
-OBJS=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
+SRC:=$(wildcard *.cpp)
+OBJS:=$(patsubst %.cpp,%.o,$(notdir $(SRC)))
 #链接的库文件
-LIBS=
+LIBS:=
 #指定链接库的目录
-LDFLAGS=
+LDFLAGS:=
 #编译器
-CXX=g++
+CXX:=g++
 #指定头文件搜索目录
-INCPATH=
+INCPATH:=
 #编译器选项
-CXXFLAGS=-std=c++11 -O2 -Wall
+CXXFLAGS:=-std=c++11 -O2 -Wall
 #编译规则
-TARGET=
+TARGET:=
 $(TARGET):$(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
-.cpp.o:
+$(OBJS):$(SRC)
 	$(CXX) $(INCPATH) -c $^ $(CXXFLAGS)
 .PHONY:clean
 clean:
