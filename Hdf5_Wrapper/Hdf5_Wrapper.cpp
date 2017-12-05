@@ -6,6 +6,7 @@
 #include "H5_Wrapper.h"
 #include "Log.h"
 #include "Authenticate.h"
+#include "ErrorCode.h"
 static CH5Wrapper s_Wrapper;
 
 /*********************************************************
@@ -13,15 +14,16 @@ FunctionName:Data2Hdf5
 FunctionDesc:
 InputParam:
 OutputParam:
-Return:
+Return:0:成功 非0:错误码
 Author:xiaowei.han
 *********************************************************/
 int Hdf5_Wrapper::Data2Hdf5(const char* szFilePath, const LP_HDF5_DATA pData)
 {
+	//参数合法性判断
 	if (nullptr == szFilePath || nullptr == pData)
 	{
 		ERROR_LOG("the param is invalid.");
-		return -1;
+		return ERROR_PARAM_INVALID;
 	}
 
 	CAuthentication::CreateInstance().AuthCall();
@@ -32,20 +34,42 @@ int Hdf5_Wrapper::Data2Hdf5(const char* szFilePath, const LP_HDF5_DATA pData)
 
 /*********************************************************
 FunctionName:Hdf52Data
-FunctionDesc:
+FunctionDesc:读取HDF5数据到内存
 InputParam:
 OutputParam:
-Return:
+Return:0:成功 非0:错误码
 Author:xiaowei.han
 *********************************************************/
-int Hdf5_Wrapper::Hdf52Data(const char* szFilePath, LP_HDF5_DATA pData)
+int Hdf5_Wrapper::Hdf52Data(const char* szFilePath, LP_HDF5_DATA* pData)
 {
+	//参数合法性判断
 	if (nullptr == szFilePath || nullptr == pData)
 	{
 		ERROR_LOG("the param is invalid.");
-		return -1;
+		return ERROR_PARAM_INVALID;
 	}
 	CAuthentication::CreateInstance().AuthCall();
 	s_Wrapper.SetFilePath(szFilePath);
-	return s_Wrapper.ReadHdf5File();
+	int nResult = s_Wrapper.ReadHdf5File();
+
+	if (0 == nResult)
+	{
+		*pData = s_Wrapper.GetData();
+	}
+
+	return nResult;
+}
+
+/*********************************************************
+FunctionName:RecyleData
+FunctionDesc:回收内存
+InputParam:
+OutputParam:
+Return:0:成功 非0:错误码
+Author:xiaowei.han
+*********************************************************/
+int Hdf5_Wrapper::RecyleData(void)
+{
+	s_Wrapper.FreeData();
+	return ERROR_NO_ERROR;
 }

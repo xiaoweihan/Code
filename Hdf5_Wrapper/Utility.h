@@ -21,8 +21,11 @@ namespace Utility
     //宽字节向多字节转换
     std::string WideChar2MultiByte(const wchar_t* szSrc);
 
-	//UTF-8->GBK
+	//GB2312->UTF-8
 	std::string GB2312ToUTF8(const std::string& strContent);
+
+	//UTF-8->GB2312
+	std::string UTF8ToGB2312(const std::string& strContent);
 #if 0
 	//从硬盘位图文件加载位图
 	HBITMAP LoadBitmapFromFile(const char* szBitmapFile);

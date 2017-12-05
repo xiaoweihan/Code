@@ -25,7 +25,16 @@ public:
 	void SetData(Hdf5_Wrapper::LP_HDF5_DATA pData);
 	//设置文件路径
 	void SetFilePath(const std::string& strFilePath);
+	//获取内存信息
+	Hdf5_Wrapper::LP_HDF5_DATA GetData(void)
+	{
+		return m_pData;
+	}
+	//释放内存
+	void FreeData(void);
 private:
+	//递归释放内存
+	void RecursiveFreeData(Hdf5_Wrapper::LP_HDF5_DATA pData);
 	//待写的数据
 	Hdf5_Wrapper::LP_HDF5_DATA m_pData = nullptr;
 	//HDF5文件所在的路径

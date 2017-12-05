@@ -158,6 +158,7 @@
     <ClInclude Include="Authenticate.h" />
     <ClInclude Include="ConverEncode.h" />
     <ClInclude Include="DataTypeFactory.h" />
+    <ClInclude Include="ErrorCode.h" />
     <ClInclude Include="H5_Wrapper.h" />
     <ClInclude Include="Hdf5_Wrapper.h" />
     <ClInclude Include="Log.h" />

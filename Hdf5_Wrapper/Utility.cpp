@@ -106,6 +106,15 @@ std::string Utility::GB2312ToUTF8(const std::string& strContent)
 	return strUTF8Content;
 }
 
+std::string Utility::UTF8ToGB2312(const std::string& strContent)
+{
+	char szContent[MAX_PATH] = { 0 };
+	memcpy(szContent, strContent.c_str(), strContent.length());
+	std::string strGB2312Content;
+	ConverEncode::UTF_8ToGB2312(strGB2312Content, szContent, static_cast<int>(strContent.length()));
+	return strGB2312Content;
+}
+
 #if 0
 HBITMAP Utility::LoadBitmapFromFile( const char* szBitmapFile )
 {
