@@ -1,0 +1,15 @@
+#ifndef __ERROR_CODE_H__
+#define  __ERROR_CODE_H__
+
+
+enum ERROR_CODE
+{
+	ERROR_NO_ERROR = 0,
+	ERROR_INVALID_PARAM,
+	ERROR_NOT_ENOUGH_SPACE
+
+};
+
+#endif
+
+
