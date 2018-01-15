@@ -14,18 +14,26 @@ Version:1.0
 #include <boost/interprocess/mapped_region.hpp>
 #include "ErrorCode.h"
 
-
-CSharedMemory::CSharedMemory(const std::string& strID, unsigned int nCapacity):
+CSharedMemory::CSharedMemory(const std::string& strID, unsigned int nCapacity, bool bCreateFlag /*= true*/):
 	m_strID(strID),
-	m_nCapacity(nCapacity)
-	
+	m_nCapacity(nCapacity),
+	m_bCreateFlag(bCreateFlag)	
 {
+	if (m_bCreateFlag)
+	{
+		using namespace boost::interprocess;
+		shared_memory_object::remove(m_strID.c_str());
+	}
 
 }
 
 CSharedMemory::~CSharedMemory()
 {
-
+	if (m_bCreateFlag)
+	{
+		using namespace boost::interprocess;
+		shared_memory_object::remove(m_strID.c_str());
+	}
 }
 
 /*********************************************************
@@ -38,69 +46,40 @@ Author:xiaowei.han
 *********************************************************/
 int CSharedMemory::CreateSharedMemory(void)
 {
+	using namespace boost::interprocess;
 	//首先清空共享内存的ID
 	if (m_strID.empty() || m_nCapacity <= 0)
 	{
 		return ERROR_INVALID_PARAM;
 	}
-	using namespace boost::interprocess;
-	shared_memory_object::remove(m_strID.c_str());
 
 	if (m_pSharedMemObj)
 	{
 		m_pSharedMemObj.reset();
 	}
 
-	m_pSharedMemObj = boost::make_shared<shared_memory_object>(create_only,m_strID.c_str(),read_write);
+	if (m_bCreateFlag)
+	{
+		m_pSharedMemObj = boost::make_shared<shared_memory_object>(create_only, m_strID.c_str(), read_write);
 
-	//设置共享内存空间大小
+		//设置共享内存空间大小
+		if (m_pSharedMemObj)
+		{
+			m_pSharedMemObj->truncate(m_nCapacity);
+			mapped_region shared_memory_mapper(*m_pSharedMemObj, read_write, 0, m_nCapacity);
+			memset(shared_memory_mapper.get_address(),0,m_nCapacity);
+		}
+	}
+	else
+	{
+		m_pSharedMemObj = boost::make_shared<shared_memory_object>(open_only, m_strID.c_str(), read_write);
+	}
 	if (m_pSharedMemObj)
 	{
-		m_pSharedMemObj->truncate(m_nCapacity);
+		return ERROR_NO_ERROR;
 	}
 
-	return ERROR_NO_ERROR;
-}
-
-/*********************************************************
-FunctionName:OpenSharedMemory
-FunctionDesc:打开共享内存
-InputParam:
-OutputParam:
-Return:0:成功 非0:失败
-Author:xiaowei.han
-*********************************************************/
-int CSharedMemory::OpenSharedMemory(void)
-{
-	if (m_strID.empty() || m_nCapacity <= 0)
-	{
-		return ERROR_INVALID_PARAM;
-	}
-	using namespace boost::interprocess;
-
-	if (m_pSharedMemObj)
-	{
-		m_pSharedMemObj.reset();
-	}
-
-	m_pSharedMemObj = boost::make_shared<shared_memory_object>(open_only, m_strID.c_str(), read_write);
-
-	return ERROR_NO_ERROR;
-}
-
-/*********************************************************
-FunctionName:CloseSharedMemory
-FunctionDesc:关闭共享内存
-InputParam:
-OutputParam:
-Return:0:成功 非0:失败
-Author:xiaowei.han
-*********************************************************/
-int CSharedMemory::CloseSharedMemory(void)
-{
-	using namespace boost::interprocess;
-	shared_memory_object::remove(m_strID.c_str());
-	return ERROR_NO_ERROR;
+	return ERROR_ALLOCATE_FAILED;
 }
 
 /*********************************************************

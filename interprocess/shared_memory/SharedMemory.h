@@ -17,17 +17,11 @@ class CSharedMemory
 {
 
 public:
-	CSharedMemory(const std::string& strID,unsigned int nCapacity);
+	CSharedMemory(const std::string& strID,unsigned int nCapacity,bool bCreateFlag = true);
 	~CSharedMemory();
 
 	//创建一片共享内存区域
 	int CreateSharedMemory(void);
-
-	//映射一片已经存在的内存区域
-	int OpenSharedMemory(void);
-
-	//关闭映射的内存区域
-	int CloseSharedMemory(void);
 
 	//向共享内存写数据
 	int WriteDataToSharedMemory(char* pData, unsigned int nDataLength);
@@ -42,6 +36,8 @@ private:
 	unsigned int m_nCapacity;
 	//已经占用的内存容量
 	unsigned int m_nUseBytes = 0;
+	//是否创建的标志
+	bool m_bCreateFlag;
 	//共享内存
 	boost::shared_ptr<boost::interprocess::shared_memory_object> m_pSharedMemObj;
 };
