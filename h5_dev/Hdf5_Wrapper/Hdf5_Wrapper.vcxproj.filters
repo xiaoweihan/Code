@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{ea4ee971-65c6-4a24-b854-409e6c30b5d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{fdd36a61-3317-4ee2-b72c-e94823bda862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="visitor">
+      <UniqueIdentifier>{8d4a5e36-41db-43c5-8d31-649ebe752048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="composite">
+      <UniqueIdentifier>{7e89a8c5-b0a6-41c2-ba44-d6faa2882059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="strategy">
+      <UniqueIdentifier>{f96ee124-4128-497d-a6c3-5b253ae9d25e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H5_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Hdf5_Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataTypeFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConverEncode.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Authenticate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractAttrHanlder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StrAttrHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatAtrrHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntAttrHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AttrHandlerFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CH5Strategy.h">
+      <Filter>strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="CppH5Strategy.h">
+      <Filter>strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="H5Contex.h">
+      <Filter>strategy</Filter>
+    </ClInclude>
+    <ClInclude Include="H5AbstractNode.h">
+      <Filter>composite</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractAttr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntAttr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatAttr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StrAttr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H5GroupNode.h">
+      <Filter>composite</Filter>
+    </ClInclude>
+    <ClInclude Include="H5DataSetNode.h">
+      <Filter>composite</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractDataType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntDataType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatDataType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StrDataType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractH5Strategy.h">
+      <Filter>strategy</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hdf5_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H5_Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTypeFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConverEncode.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Authenticate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractAttrHanlder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StrAttrHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatAtrrHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntAttrHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AttrHandlerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CH5Strategy.cpp">
+      <Filter>strategy</Filter>
+    </ClCompile>
+    <ClCompile Include="CppH5Strategy.cpp">
+      <Filter>strategy</Filter>
+    </ClCompile>
+    <ClCompile Include="H5Contex.cpp">
+      <Filter>strategy</Filter>
+    </ClCompile>
+    <ClCompile Include="H5AbstractNode.cpp">
+      <Filter>composite</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractAttr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntAttr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatAttr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StrAttr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H5DataSetNode.cpp">
+      <Filter>composite</Filter>
+    </ClCompile>
+    <ClCompile Include="H5GroupNode.cpp">
+      <Filter>composite</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractDataType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntDataType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatDataType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StrDataType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractH5Strategy.cpp">
+      <Filter>strategy</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Hdf5_Wrapper.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
