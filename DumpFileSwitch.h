@@ -1,7 +1,7 @@
 /*******************************************************************************
-Copyright(C):Envision. Co., Ltd.
+Copyright(C):
 FileName:DumpFileSwitch.h
-Description:Dump文件开关器
+Description:Dump脦脛录镁驴陋鹿脴脝梅
 Author:xiaowei.han
 Date:2016/6/29 12:43
 Others:
