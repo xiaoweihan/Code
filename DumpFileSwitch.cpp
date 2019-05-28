@@ -1,7 +1,7 @@
 /*******************************************************************************
-Copyright(C):Envision. Co., Ltd.
+Copyright(C):
 FileName:DumpFileSwitch.cpp
-Description:Éú³ÉdumpÎÄ¼ş
+Description:ç”Ÿæˆdumpæ–‡ä»¶
 Author:xiaowei.han
 Date:2016/6/29 12:43
 Others:
@@ -39,8 +39,8 @@ static LONG WINAPI CustomExceptionFilter(EXCEPTION_POINTERS* pException)
 
 
 /*****************************************************************************
-* @º¯ÊıÃû³Æ : CDumpFileSwitch
-* @¹¦ÄÜÃèÊö : ¹¹Ôìº¯Êı
+* @å‡½æ•°åç§° : CDumpFileSwitch
+* @åŠŸèƒ½æè¿° : æ„é€ å‡½æ•°
 * @author : xiaowei.han
 * @date : 2016/6/29 13:33
 * @version : ver 1.0
@@ -58,8 +58,8 @@ CDumpFileSwitch::CDumpFileSwitch(LPCTSTR pDumpFileName)
 }
 
 /*****************************************************************************
-* @º¯ÊıÃû³Æ : CDumpFileSwitch
-* @¹¦ÄÜÃèÊö : Îö¹¹º¯Êı
+* @å‡½æ•°åç§° : CDumpFileSwitch
+* @åŠŸèƒ½æè¿° : ææ„å‡½æ•°
 * @author : xiaowei.han
 * @date : 2016/6/29 13:33
 * @version : ver 1.0
