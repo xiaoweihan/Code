@@ -5,31 +5,21 @@
 作者:hanxiaowei
 完成日期:2013-07-29
 **************************************************************************************************************************************************/
-#include "stdafx.h"
 #include "Log.h"
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/lock_guard.hpp>
-#ifdef _WIN32
-#pragma warning(disable:4996)
-#pragma warning(disable:4251)
-#pragma warning(disable:4554)
-#endif
+#include <time.h>
+#include <string.h>
+#include <sstream>
 
 //缓冲区的最大长度
-#define  BUFFER_MAX_SIZE          (1024 * 10)
+const unsigned int  BUFFER_MAX_SIZE  = (1024 * 10);
 
 //日志文件的最大容量
-#define  LOG_MAX_SIZE             (100 * 1024 * 1024)
+const unsigned int LOG_MAX_SIZE = (100 * 1024 * 1024);
 
-#ifndef _WIN32
-#define MAX_PATH                  (260)
-#endif
+// 文件路径的最大长度
+const unsigned int FILE_PATH_MAX_LENGTH = (260);
 
-//用于同步的类
-static boost::mutex s_Lock;
-
-//记录文件达到日志的等级的次数
-static unsigned int s_nTimes = 1;
+using namespace std;
 
 /********************************************************************************************************************************************************************/
 //操作文件类的实现
@@ -301,6 +291,8 @@ void CLog::WriteLog( LOGLEVEL loglevel,const char* szFormat,... )
 	{
 		return;
 	}
+
+	m_Lock.Lock();
 	char szLogContent[BUFFER_MAX_SIZE] = {0};
 	va_list varg;
 	va_start(varg,szFormat);
@@ -312,20 +304,28 @@ void CLog::WriteLog( LOGLEVEL loglevel,const char* szFormat,... )
 	time(&logtime);
 	struct tm *plogtime = NULL; 
 	plogtime = localtime(&logtime);
-	char szTime[MAX_PATH] = {0};
-	char szDayTime[MAX_PATH] = {0};
+	char szLogFileNamePrefix[FILE_PATH_MAX_LENGTH] = {0};
+	char szLogTime[FILE_PATH_MAX_LENGTH] = {0};
+	int nYear = plogtime->tm_year + 1900;
+	int nMonth = plogtime->tm_mon + 1;
+	int nDay = plogtime->tm_mday;
+	int nHour = plogtime->tm_hour;
+	int nMin = plogtime->tm_min;
+	int nSec = plogtime->tm_sec;	
+
 	//把时间格式化为字符串
-	sprintf(szTime,"%02d-%02d-%02d %02d:%02d:%02d",plogtime->tm_year + 1900,plogtime->tm_mon + 1,plogtime->tm_mday,plogtime->tm_hour,plogtime->tm_min,plogtime->tm_sec);
+	snprintf(szLogTime,sizeof(szLogTime) - 1,"%02d-%02d-%02d %02d:%02d:%02d",nYear,nMonth,nDay,nHour,nMin,nSec);
+	
 	//判断前缀
 	if (m_strLogPrefix.empty())
 	{
-		sprintf(szDayTime,"%s_%02d_%02d_%02d","log",plogtime->tm_year + 1900,plogtime->tm_mon + 1,plogtime->tm_mday);
+		snprintf(szLogFileNamePrefix,sizeof(szLogFileNamePrefix) - 1,"%s_%02d_%02d_%02d","log",nYear,nMonth,nDay);
 	}
 	else
 	{
-		sprintf(szDayTime,"%s_%02d_%02d_%02d",m_strLogPrefix.c_str(),plogtime->tm_year + 1900,plogtime->tm_mon + 1,plogtime->tm_mday);
+		snprintf(szLogFileNamePrefix,sizeof(szLogFileNamePrefix) - 1,"%s_%02d_%02d_%02d",m_strLogPrefix.c_str(),nYear,nMonth,nDay);
 	}
-	char szLogLevel[MAX_PATH] = {0};
+	char szLogLevel[FILE_PATH_MAX_LENGTH] = {0};
 	switch (loglevel)
 	{
 	case LOG_DEBUG:
@@ -350,30 +350,44 @@ void CLog::WriteLog( LOGLEVEL loglevel,const char* szFormat,... )
 		break;
 	}
 	//查看是否存在
-	char szLogName[MAX_PATH] = {0};
-	//进入同步
-	boost::lock_guard<boost::mutex> Lock(s_Lock);
-	while (1)
+	char szLogFileName[FILE_PATH_MAX_LENGTH] = {0};
+
+	// 判断是否是第一次设置
+	if (!m_RollFlag.is_valid())
 	{
-		memset(szLogName,0,sizeof(szLogName));
-#ifdef _WIN32
-		sprintf(szLogName,"%s\\%s_%d.dat",m_strLogDir.c_str(),szDayTime,s_nTimes);
-		if (0 == _access(szLogName,0))
-#else
-		sprintf(szLogName,"%s/%s_%d.dat",m_strLogDir.c_str(),szDayTime,s_nTimes);
-		if (0 == access(szLogName,0))
-#endif
+		m_RollFlag.nYear = nDay;
+		m_RollFlag.nMonth = nMonth;
+		m_RollFlag.nYear = nYear;
+		m_RollFlag.nTimes = 0;
+	}
+	else
+	{
+		if (m_RollFlag.nDay != nDay || m_RollFlag.nMonth != nMonth || m_RollFlag.nYear != nYear)
+		{
+			m_RollFlag.nYear = nDay;
+			m_RollFlag.nMonth = nMonth;
+			m_RollFlag.nYear = nYear;
+			m_RollFlag.nTimes = 0;
+		}
+	}
+
+	while (true)
+	{
+		memset(szLogFileName,0,sizeof(szLogFileName));
+
+		snprintf(szLogFileName,sizeof(szLogFileName) - 1,"%s/%s_%d.dat",m_strLogDir.c_str(),szLogFileNamePrefix,m_RollFlag.nTimes);
+		if (0 == access(szLogFileName,0))
 		{
 			//查看文件的大小，是否超过100M
 			CHandleFile file;
-			if (file.Open(szLogName))
+			if (file.Open(szLogFileName))
 			{
 				unsigned long lSize = file.GetFileSize();
 				file.Close();
 				//如果大于100M
 				if (lSize >= LOG_MAX_SIZE)
 				{
-					s_nTimes++;
+					m_RollFlag.nTimes++;
 					continue;
 					//查找前面写了多少个日志文件了
 				}
@@ -390,20 +404,31 @@ void CLog::WriteLog( LOGLEVEL loglevel,const char* szFormat,... )
 			break;
 		}
 	}
+
+	// 获取线程ID
+	int nThreadID = pthread_self();
+
+	char szThreadID[100] = {0};
+
+	sprintf(szThreadID,"[threadID = %d] ",nThreadID);
+
+
 	//开始写文件
-	string strContent = string(szTime) + string(szLogLevel) + string(szLogContent) + string("\n");
+	string strContent = string(szThreadID) + string(szLogTime) + string(szLogLevel) + string(szLogContent) + string("\n");
 
 	char szContent[BUFFER_MAX_SIZE] = {0};
 	strncpy(szContent,strContent.c_str(),strContent.length());
 
 	CHandleFile Writefile;
 
-	if (Writefile.Open(szLogName))
+	if (Writefile.Open(szLogFileName))
 	{
 		unsigned int nWriteLength = 0;
 		Writefile.Write(szContent,(unsigned int)strContent.length(),nWriteLength);
 		Writefile.Close();
 	}
+
+	m_Lock.UnLock();
 }
 
 CLog::CLog( void )

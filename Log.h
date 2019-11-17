@@ -5,38 +5,19 @@
 作者:hanxiaowei
 完成日期:2013-07-29
 **************************************************************************************************************************************************/
-#ifndef LOG_H
-#define LOG_H
+#ifndef __LOG_H
+#define __LOG_H
 
 //头文件
 /**************************************************************************************************************************************************/
-#ifdef _WIN32
-#include <stdio.h>
-#include <Windows.h>
-#include <map>
-#include <string>
-#include <stdarg.h>
-#include <time.h>
-#include <io.h>
-using std::string;
-//包含Linux操作串口的头文件
-#else
-#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <termios.h>
 #include <errno.h>
-#include <pthread.h>
-#include <map>
 #include <string>
 #include <stdarg.h>
 #include <time.h>
-#include <string.h>
-using std::string;
-#endif
+#include "Lock.h"
+
 /************************************************************************************************************************************************/
 
 //日志宏定义
@@ -71,6 +52,40 @@ enum LOGLEVEL
 	LOG_FATAL,
 	LOG_NECESSARY
 };
+
+// 文件ROll的结构体定义
+typedef struct _log_roll_info
+{
+	// 年
+	int nYear;
+	// 月
+	int nMonth;
+	// 日
+	int nDay;
+	//
+	unsigned int nTimes;
+
+
+	_log_roll_info()
+	{
+		nYear = 0;
+		nMonth = 0;
+		nDay = 0;
+		nTimes = 0;
+	}
+
+	bool is_valid()
+	{
+		if (0 == nYear && 0 == nMonth && 0 == nDay)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+}LOG_ROLL_INFO,* LP_LOG_ROLL_INFO;
+
 /************************************************************************************************************************************************/
 
 //类定义
@@ -236,12 +251,14 @@ public:
 
 private:
 	//日志文件的保存目录
-	string m_strLogDir;
+	std::string m_strLogDir;
 	//打印日志的等级
 	LOGLEVEL m_loglevel;
 	//日志文件的前缀名
-	string m_strLogPrefix;
-
+	std::string m_strLogPrefix;
+	//锁
+	CLock m_Lock;
+	LOG_ROLL_INFO m_RollFlag;
 	static CLog s_Log;
 };
 
